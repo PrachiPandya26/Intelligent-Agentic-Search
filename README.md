@@ -121,7 +121,7 @@ webchat/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/LaxmiNarayana31/webchat.git
+git clone https://github.com/prachipandya26/webchat.git
 cd webchat
 ```
 
