@@ -28,9 +28,9 @@ from backend.app.api.user_routes import router as user_router
 from backend.app.cache.vector_cache import vector_store_cache
 from backend.app.core.config import settings
 from backend.app.core.errors import (
-    WebChatException,
+    ragchatException,
     generic_exception_handler,
-    webchat_exception_handler,
+    ragchat_exception_handler,
 )
 from backend.app.core.logging import logger
 from backend.app.core.rate_limiter import RateLimitMiddleware
@@ -133,7 +133,7 @@ app.add_middleware(
 )
 
 # Custom Exception Handlers
-app.add_exception_handler(WebChatException, webchat_exception_handler)
+app.add_exception_handler(ragchatException, ragchat_exception_handler)
 app.add_exception_handler(Exception, generic_exception_handler)
 
 # System Health Check Endpoint
@@ -189,7 +189,7 @@ def main():
     """Parses CLI arguments and launches FastAPI backend service or Streamlit dashboard."""
     try:
         parser = argparse.ArgumentParser(
-            description="WebChat AI Backend & Service Launcher",
+            description="ragchat AI Backend & Service Launcher",
             formatter_class=argparse.RawTextHelpFormatter,
         )
         parser.add_argument(

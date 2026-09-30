@@ -28,7 +28,7 @@ async def test_graph_execution_direct_chat():
 
     with patch.object(service.llm, "generate_response_async") as mock_gen:
         mock_gen.return_value = {
-            "text": "Hello! I am WebChat AI.",
+            "text": "Hello! I am ragchat AI.",
             "model_used": "gemini-2.0-flash",
             "provider": "gemini",
             "fallback_triggered": False,

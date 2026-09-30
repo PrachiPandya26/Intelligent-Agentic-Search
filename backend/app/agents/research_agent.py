@@ -209,7 +209,7 @@ class ResearchAgent:
     def _perform_web_search(self, query: str, max_results: int = 4) -> list[dict[str, Any]]:
         """Queries DuckDuckGo Instant Answer API and Wikipedia Search API."""
         web_results: list[dict[str, Any]] = []
-        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) WebChat/2.0"}
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ragchat/2.0"}
 
         # DuckDuckGo Instant Knowledge API
         try:

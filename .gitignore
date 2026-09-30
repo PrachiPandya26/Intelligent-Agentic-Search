@@ -37,7 +37,7 @@ streamlit_app/.streamlit/runtime/
 *.db
 *.sqlite
 *.sqlite3
-webchat.db
+ragchat.db
 
 # Application runtime storage, vector stores & caches (preserve data directory)
 data/*

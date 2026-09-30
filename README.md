@@ -1,4 +1,4 @@
-<h1 align="center">WebChat</h1>
+<h1 align="center">ragchat</h1>
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12%20%7C%203.13-blue?style=for-the-badge&logo=python&logoColor=white" alt="Python Version" />
   <img src="https://img.shields.io/badge/FastAPI-0.115+-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI" />
@@ -14,7 +14,7 @@
 
 ## Overview
 
-WebChat extracts article contents, processes embedded architectural diagrams, and builds a hybrid index across dense embeddings and sparse keywords. A supervisor agent routes queries, breaks complex questions into sub-queries, grades document relevance to prevent hallucinations, and streams answers with citations in real time.
+ragchat extracts article contents, processes embedded architectural diagrams, and builds a hybrid index across dense embeddings and sparse keywords. A supervisor agent routes queries, breaks complex questions into sub-queries, grades document relevance to prevent hallucinations, and streams answers with citations in real time.
 
 ## Features
 
@@ -58,7 +58,7 @@ WebChat extracts article contents, processes embedded architectural diagrams, an
 
 ## Architecture
 
-WebChat decouples routing, retrieval, relevance grading, and synthesis into dedicated agent roles.
+ragchat decouples routing, retrieval, relevance grading, and synthesis into dedicated agent roles.
 
 For detailed architecture diagrams, sequence flows, and component catalogs, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
@@ -75,7 +75,7 @@ For detailed architecture diagrams, sequence flows, and component catalogs, see 
 ## Project Structure
 
 ```
-webchat/
+ragchat/
 ├── backend/
 │   ├── app/
 │   │   ├── agents/          # Router, Planner, Research, Critic, Supervisor, Synthesis agents
@@ -121,8 +121,8 @@ webchat/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/prachipandya26/webchat.git
-cd webchat
+git clone https://github.com/prachipandya26/ragchat.git
+cd ragchat
 ```
 
 ### 2. Environment Configuration

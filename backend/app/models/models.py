@@ -20,7 +20,7 @@ from backend.app.models.base import Base
 
 class UserEntity(Base):
     """User account tracking email and daily rate limit query quotas."""
-    __tablename__ = "webchat_users"
+    __tablename__ = "ragchat_users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String(255), unique=True, index=True, nullable=False)
@@ -40,10 +40,10 @@ class UserEntity(Base):
 
 class ChatSessionEntity(Base):
     """Conversation session attached to a registered user or guest."""
-    __tablename__ = "webchat_sessions"
+    __tablename__ = "ragchat_sessions"
 
     session_id = Column(String(64), primary_key=True, default=lambda: str(uuid.uuid4()))
-    user_id = Column(Integer, ForeignKey("webchat_users.id", ondelete="CASCADE"), nullable=True, index=True)
+    user_id = Column(Integer, ForeignKey("ragchat_users.id", ondelete="CASCADE"), nullable=True, index=True)
     guest_client_id = Column(String(128), nullable=True, index=True)
     title = Column(String(255), default="New Conversation", nullable=False)
     url = Column(Text, nullable=True)
@@ -61,10 +61,10 @@ class ChatSessionEntity(Base):
 
 class ChatMessageEntity(Base):
     """Individual message turn storing role, text, and source citations."""
-    __tablename__ = "webchat_messages"
+    __tablename__ = "ragchat_messages"
 
     id = Column(String(64), primary_key=True, default=lambda: str(uuid.uuid4()))
-    session_id = Column(String(64), ForeignKey("webchat_sessions.session_id", ondelete="CASCADE"), nullable=False, index=True)
+    session_id = Column(String(64), ForeignKey("ragchat_sessions.session_id", ondelete="CASCADE"), nullable=False, index=True)
     role = Column(String(32), nullable=False)  # 'user' | 'assistant' | 'system'
     content = Column(Text, nullable=False)
     model_used = Column(String(128), nullable=True)
@@ -95,7 +95,7 @@ class ChatMessageEntity(Base):
 class GuestUsageEntity(Base):
     """Tracks free guest query count (up to 5 free requests)."""
     """Tracks guest query count and enforces dual-layer (client_id + ip_address) daily limits."""
-    __tablename__ = "webchat_guest_usage"
+    __tablename__ = "ragchat_guest_usage"
 
     client_id = Column(String(128), primary_key=True)
     ip_address = Column(String(64), nullable=True, index=True)
@@ -106,7 +106,7 @@ class GuestUsageEntity(Base):
 
 class UrlCacheEntity(Base):
     """Caches ingested URL content, metadata, and vector storage reference by URL hash."""
-    __tablename__ = "webchat_url_cache"
+    __tablename__ = "ragchat_url_cache"
 
     url_hash = Column(String(64), primary_key=True, index=True)
     url = Column(Text, nullable=False)

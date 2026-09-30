@@ -15,11 +15,11 @@ class Settings(BaseSettings):
     )
 
     # Project Information
-    PROJECT_NAME: str = "WebChat AI"
+    PROJECT_NAME: str = "ragchat AI"
     VERSION: str = "2.0.0"
     API_V1_STR: str = "/api"
     LOG_LEVEL: str = Field(default="INFO", alias="LOG_LEVEL")
-    LOG_FILE: str = Field(default="logs/webchat.log", alias="LOG_FILE")
+    LOG_FILE: str = Field(default="logs/ragchat.log", alias="LOG_FILE")
 
     # Server Settings
     BACKEND_HOST: str = Field(default="0.0.0.0", alias="BACKEND_HOST")

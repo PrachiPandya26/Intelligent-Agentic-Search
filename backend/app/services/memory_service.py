@@ -14,7 +14,7 @@ load_dotenv()
 class MemoryService:
     """Provides high-level integration with Memori Labs for automatic conversation memory management."""
 
-    def __init__(self, process_id: str = "webchat"):
+    def __init__(self, process_id: str = "ragchat"):
         """Initializes memory service with Memori process identifier."""
         try:
             self.process_id = process_id

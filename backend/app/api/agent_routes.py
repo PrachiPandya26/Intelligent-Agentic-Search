@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from backend.app.agents.router_agent import router_agent
 from backend.app.agents.supervisor_agent import supervisor_agent
-from backend.app.core.errors import WebChatException
+from backend.app.core.errors import ragchatException
 from backend.app.core.logging import logger
 from backend.app.dtos.agent_dto import (
     AgentCapabilityDto,
@@ -77,7 +77,7 @@ async def query_agent_system(req: AgentQueryRequestDto):
             trace=trace_data,
             telemetry=result.telemetry,
         )
-    except WebChatException as wce:
+    except ragchatException as wce:
         logger.warning(f"Agent query handled exception: {wce.message}")
         raise HTTPException(
             status_code=wce.status_code,

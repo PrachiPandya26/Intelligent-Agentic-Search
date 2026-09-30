@@ -108,8 +108,8 @@ def init_db():
         with active_engine.connect() as conn:
             try:
                 from sqlalchemy import text
-                conn.execute(text("ALTER TABLE webchat_guest_usage ADD COLUMN IF NOT EXISTS ip_address VARCHAR(64);"))
-                conn.execute(text("CREATE INDEX IF NOT EXISTS ix_webchat_guest_usage_ip_address ON webchat_guest_usage(ip_address);"))
+                conn.execute(text("ALTER TABLE ragchat_guest_usage ADD COLUMN IF NOT EXISTS ip_address VARCHAR(64);"))
+                conn.execute(text("CREATE INDEX IF NOT EXISTS ix_ragchat_guest_usage_ip_address ON ragchat_guest_usage(ip_address);"))
                 conn.commit()
             except Exception as mig_err:
                 logger.warning(f"Database schema migration warning: {mig_err}")

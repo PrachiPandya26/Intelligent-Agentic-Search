@@ -1,5 +1,5 @@
 [project]
-name = "webchat"
+name = "ragchat"
 version = "2.0.0"
 description = "Intelligent AI web conversational system with paywall bypass, multi-provider LLM fallback, and dual Streamlit & Web interfaces."
 readme = "../README.md"

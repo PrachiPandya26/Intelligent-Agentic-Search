@@ -10,5 +10,5 @@ def launch_streamlit(port: Optional[int] = None) -> None:
     streamlit_file = str(root_dir / "streamlit_app" / "app.py")
     port_arg = ["--server.port", str(port)] if port else []
     cmd = [sys.executable, "-m", "streamlit", "run", streamlit_file] + port_arg
-    print(f"[WebChat] Starting Streamlit Dashboard ({' '.join(cmd)})...")
+    print(f"[ragchat] Starting Streamlit Dashboard ({' '.join(cmd)})...")
     sys.exit(subprocess.call(cmd))

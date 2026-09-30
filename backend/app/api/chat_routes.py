@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import StreamingResponse
 
-from backend.app.core.errors import WebChatException
+from backend.app.core.errors import ragchatException
 from backend.app.core.logging import logger
 from backend.app.core.rate_limiter import get_client_ip
 from backend.app.dtos.chat_dto import ChatRequestDto, ChatResponseDto
@@ -31,7 +31,7 @@ async def chat_endpoint(req: ChatRequestDto, request: Request):
 
         return await chat_service.handle_chat_query_async(req, client_ip=client_ip)
 
-    except WebChatException as wce:
+    except ragchatException as wce:
         logger.warning(f"Chat request handled exception: {wce.message}")
         raise HTTPException(
             status_code=wce.status_code,
@@ -47,7 +47,7 @@ def scrape_endpoint(req: ScrapeRequestDto):
     """Extracts web page content with paywall bypass and indexes embeddings into cache."""
     try:
         return chat_service.handle_scrape_and_index(req)
-    except WebChatException as wce:
+    except ragchatException as wce:
         logger.warning(f"Scrape request handled exception: {wce.message}")
         raise HTTPException(
             status_code=wce.status_code,
@@ -63,7 +63,7 @@ def crawl_endpoint(req: CrawlRequestDto):
     """Performs recursive domain crawl and indexes pages into hierarchical vector store."""
     try:
         return chat_service.handle_crawl_and_index(req)
-    except WebChatException as wce:
+    except ragchatException as wce:
         logger.warning(f"Crawl request handled exception: {wce.message}")
         raise HTTPException(
             status_code=wce.status_code,
@@ -81,7 +81,7 @@ def crawl_endpoint(req: CrawlRequestDto):
 #         file_bytes = await file.read()
 #         filename = file.filename or "uploaded_document.txt"
 #         return chat_service.handle_file_upload_and_index(file_bytes=file_bytes, filename=filename)
-#     except WebChatException as wce:
+#     except ragchatException as wce:
 #         logger.warning(f"File upload handled exception: {wce.message}")
 #         raise HTTPException(
 #             status_code=wce.status_code,

@@ -529,7 +529,7 @@ class RAGService:
                 doc_header += "\n"
 
             system_instruction = (
-                "You are WebChat, an advanced AI research assistant specialized in analyzing and answering questions strictly about the provided website or document.\n\n"
+                "You are ragchat, an advanced AI research assistant specialized in analyzing and answering questions strictly about the provided website or document.\n\n"
                 "STRICT CONTEXT GROUNDING & BEHAVIORAL GUIDELINES:\n"
                 "1. STRICT CONTEXT GROUNDING & ABSOLUTE FAITHFULNESS: Ground your answers strictly, solely, and completely in the provided Document Context and Context Excerpts. "
                 "Never invent facts, speculate beyond what is documented, or bring in outside knowledge about external entities, people, events, or metrics. "

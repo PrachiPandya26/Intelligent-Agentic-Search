@@ -30,7 +30,7 @@ _current_file = Path(__file__).resolve()
 _backend_dir = _current_file.parent.parent.parent
 _project_root = _backend_dir.parent
 DEFAULT_LOGS_DIR = _project_root / "logs"
-DEFAULT_LOG_FILE = DEFAULT_LOGS_DIR / "webchat.log"
+DEFAULT_LOG_FILE = DEFAULT_LOGS_DIR / "ragchat.log"
 
 
 def setup_logging(
@@ -39,8 +39,8 @@ def setup_logging(
 ) -> logging.Logger:
     """Configures structured logging for the application.
 
-    - Our code-level logs ('webchat'): Routine INFO/DEBUG logs are stored in the
-      log file (logs/webchat.log) to keep the terminal clean, while ERRORs always
+    - Our code-level logs ('ragchat'): Routine INFO/DEBUG logs are stored in the
+      log file (logs/ragchat.log) to keep the terminal clean, while ERRORs always
       print to terminal stderr.
     - Package-level logs & errors: Third-party packages (Memori, FAISS, DB drivers,
       etc.) are NOT suppressed. Package errors and outputs remain visible.
@@ -82,11 +82,11 @@ def setup_logging(
         root_logger.addHandler(file_handler)
         root_logger.addHandler(package_console_handler)
 
-        # Configure our code-level application logger ('webchat'):
-        # 1. Writes all INFO/DEBUG/WARNING/ERROR to logs/webchat.log
+        # Configure our code-level application logger ('ragchat'):
+        # 1. Writes all INFO/DEBUG/WARNING/ERROR to logs/ragchat.log
         # 2. Only prints ERRORs to terminal stderr (preventing routine startup clutter)
         # 3. Does not duplicate or leak INFO clutter to terminal
-        app_logger = logging.getLogger("webchat")
+        app_logger = logging.getLogger("ragchat")
         app_logger.setLevel(level)
         app_logger.handlers.clear()
         app_logger.addHandler(file_handler)
@@ -100,7 +100,7 @@ def setup_logging(
 
         return app_logger
     except Exception:
-        return logging.getLogger("webchat")
+        return logging.getLogger("ragchat")
 
 
 logger = setup_logging()

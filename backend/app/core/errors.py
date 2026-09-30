@@ -5,8 +5,8 @@ from fastapi.responses import JSONResponse
 
 
 
-class WebChatException(Exception):
-    """Base exception for all domain and service errors in WebChat."""
+class ragchatException(Exception):
+    """Base exception for all domain and service errors in ragchat."""
 
     def __init__(self, message: str, status_code: int = status.HTTP_500_INTERNAL_SERVER_ERROR, details: Optional[Dict[str, Any]] = None):
         super().__init__(message)
@@ -15,7 +15,7 @@ class WebChatException(Exception):
         self.details = details or {}
 
 
-class ScraperException(WebChatException):
+class ScraperException(ragchatException):
     """Raised when website scraping or extraction fails."""
 
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None):
@@ -29,39 +29,39 @@ class PaywallDetectedException(ScraperException):
         super().__init__(message, details=details)
 
 
-class RateLimitExceededException(WebChatException):
+class RateLimitExceededException(ragchatException):
     """Raised when all LLM providers or models have exceeded their rate limits."""
 
     def __init__(self, message: str = "Rate limit exceeded across all available model providers.", details: Optional[Dict[str, Any]] = None):
         super().__init__(message, status_code=status.HTTP_429_TOO_MANY_REQUESTS, details=details)
 
 
-class LLMProviderException(WebChatException):
+class LLMProviderException(ragchatException):
     """Raised when an LLM provider encounters an unrecoverable failure."""
 
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None):
         super().__init__(message, status_code=status.HTTP_502_BAD_GATEWAY, details=details)
 
 
-class VectorStoreException(WebChatException):
+class VectorStoreException(ragchatException):
     """Raised when embedding generation or vector indexing fails."""
 
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None):
         super().__init__(message, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, details=details)
 
 
-class ValidationException(WebChatException):
+class ValidationException(ragchatException):
     """Raised for input parameter or URL validation errors."""
 
     def __init__(self, message: str, details: Optional[Dict[str, Any]] = None):
         super().__init__(message, status_code=status.HTTP_400_BAD_REQUEST, details=details)
 
 
-async def webchat_exception_handler(request: Request, exc: Exception) -> JSONResponse:
-    """Standardized exception handler for custom WebChat domain errors."""
-    status_code = exc.status_code if isinstance(exc, WebChatException) else status.HTTP_400_BAD_REQUEST
-    message = exc.message if isinstance(exc, WebChatException) else str(exc)
-    details = exc.details if isinstance(exc, WebChatException) else None
+async def ragchat_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Standardized exception handler for custom ragchat domain errors."""
+    status_code = exc.status_code if isinstance(exc, ragchatException) else status.HTTP_400_BAD_REQUEST
+    message = exc.message if isinstance(exc, ragchatException) else str(exc)
+    details = exc.details if isinstance(exc, ragchatException) else None
     return JSONResponse(
         status_code=status_code,
         content={

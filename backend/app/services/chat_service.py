@@ -8,7 +8,7 @@ from backend.app.cache.semantic_cache import semantic_cache_service
 from backend.app.cache.vector_cache import vector_store_cache
 from backend.app.core.errors import (
     ScraperException,
-    WebChatException,
+    ragchatException,
 )
 from backend.app.core.logging import logger
 from backend.app.dtos.chat_dto import ChatMessageDto, ChatRequestDto, ChatResponseDto, CitationItemDto
@@ -306,11 +306,11 @@ class ChatService:
                 paywall_detected=False,
                 paywall_bypassed=any_paywall_bypassed,
             )
-        except WebChatException:
+        except ragchatException:
             raise
         except Exception as e:
             logger.error(f"ChatService: Unexpected error in scrape_and_index: {e}", exc_info=True)
-            raise WebChatException(message=f"Scraping failed: {str(e)}", status_code=500)
+            raise ragchatException(message=f"Scraping failed: {str(e)}", status_code=500)
 
     def handle_crawl_and_index(self, req: CrawlRequestDto) -> CrawlResponseDto:
         """Recursively crawls linked pages within the same domain and indexes into vector cache."""
@@ -358,11 +358,11 @@ class ChatService:
                 total_words=crawl_res.get("total_words", 0),
                 pages=page_dtos,
             )
-        except WebChatException:
+        except ragchatException:
             raise
         except Exception as e:
             logger.error(f"ChatService: Unexpected error in crawl_and_index: {e}", exc_info=True)
-            raise WebChatException(message=f"Domain crawl failed: {str(e)}", status_code=500)
+            raise ragchatException(message=f"Domain crawl failed: {str(e)}", status_code=500)
 
     # def handle_file_upload_and_index(self, file_bytes: bytes, filename: str) -> FileUploadResponseDto:
     #     """Parses uploaded file, extracts text, and indexes into vector cache."""
@@ -401,11 +401,11 @@ class ChatService:
     #             word_count=doc_res.get("word_count", 0),
     #             virtual_url=virtual_url,
     #         )
-    #     except WebChatException:
+    #     except ragchatException:
     #         raise
     #     except Exception as e:
     #         logger.error(f"ChatService: File upload indexing failed: {e}", exc_info=True)
-    #         raise WebChatException(message=f"File processing failed: {str(e)}", status_code=500)
+    #         raise ragchatException(message=f"File processing failed: {str(e)}", status_code=500)
 
     def _resolve_session_chat_history(
         self,
@@ -446,7 +446,7 @@ class ChatService:
                 ip_address=client_ip,
             )
             if not allowed:
-                raise WebChatException(
+                raise ragchatException(
                     message=err_msg,
                     status_code=429,
                     details={"quota": quota_info, "requires_email": quota_info.get("requires_email", False)},
@@ -562,11 +562,11 @@ class ChatService:
 
             return response_dto
 
-        except WebChatException:
+        except ragchatException:
             raise
         except Exception as e:
             logger.error(f"ChatService: Chat generation failed: {e}", exc_info=True)
-            raise WebChatException(message=f"Chat generation failed: {str(e)}", status_code=500)
+            raise ragchatException(message=f"Chat generation failed: {str(e)}", status_code=500)
 
     async def handle_chat_stream_async(self, req: ChatRequestDto, client_ip: Optional[str] = None) -> AsyncGenerator[str, None]:
         """Executes streaming conversational RAG via SSE, tracking dual-layer quota and persisting conversation turn asynchronously."""
@@ -578,7 +578,7 @@ class ChatService:
                 ip_address=client_ip,
             )
             if not allowed:
-                raise WebChatException(
+                raise ragchatException(
                     message=err_msg,
                     status_code=429,
                     details={"quota": quota_info, "requires_email": quota_info.get("requires_email", False)},
@@ -734,7 +734,7 @@ class ChatService:
             # Terminal event
             yield format_done_event()
 
-        except WebChatException as wce:
+        except ragchatException as wce:
             logger.warning(f"ChatService: Stream handled exception: {wce.message}")
             yield format_sse_event("error", {"message": wce.message, "status_code": wce.status_code})
             yield format_done_event()

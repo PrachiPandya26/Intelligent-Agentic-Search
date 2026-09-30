@@ -3833,7 +3833,7 @@ wheels = [
 ]
 
 [[package]]
-name = "webchat"
+name = "ragchat"
 version = "2.0.0"
 source = { virtual = "." }
 dependencies = [

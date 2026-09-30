@@ -2,14 +2,14 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from backend.app.agents.chat_agent import WebChatAgent
+from backend.app.agents.chat_agent import ragchatAgent
 from backend.app.dtos.chat_dto import ChatResponseDto
 
 
 @pytest.mark.asyncio
 async def test_chat_agent_answer_query_async():
-    """Verifies that WebChatAgent returns a fully populated ChatResponseDto via Supervisor."""
-    agent = WebChatAgent()
+    """Verifies that ragchatAgent returns a fully populated ChatResponseDto via Supervisor."""
+    agent = ragchatAgent()
 
     mock_result = MagicMock()
     mock_result.answer = "Antigravity enforces clean separation between DTOs, Core Logic, and Routes."
@@ -36,8 +36,8 @@ async def test_chat_agent_answer_query_async():
 
 @pytest.mark.asyncio
 async def test_chat_agent_answer_query_stream_events():
-    """Verifies that WebChatAgent yields reasoning step events and LLM token chunks."""
-    agent = WebChatAgent()
+    """Verifies that ragchatAgent yields reasoning step events and LLM token chunks."""
+    agent = ragchatAgent()
 
     async def mock_stream_events(*args, **kwargs):
         yield {"type": "step", "step": "route", "title": "Intent Query Routing", "status": "done"}

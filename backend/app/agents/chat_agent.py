@@ -16,7 +16,7 @@ from backend.app.services.rag_service import rag_service
 from backend.app.repositories.url_cache_repository import url_cache_repository
 
 
-class WebChatAgent:
+class ragchatAgent:
     """Autonomous conversational agent orchestrating multi-agent collaboration and generation."""
 
     def __init__(self):
@@ -28,7 +28,7 @@ class WebChatAgent:
             self.memory = memory_service
             self.supervisor = supervisor_agent
         except Exception as e:
-            logger.error(f"Error initializing WebChatAgent: {e}", exc_info=True)
+            logger.error(f"Error initializing ragchatAgent: {e}", exc_info=True)
             raise
 
     def _resolve_vector_store(
@@ -60,7 +60,7 @@ class WebChatAgent:
                             if vs:
                                 self.vector_cache.set(url_hash, vs, metadata=meta)
                 except Exception as hydrate_err:
-                    logger.warning(f"WebChatAgent: Could not re-hydrate vector store from persistent cache: {hydrate_err}")
+                    logger.warning(f"ragchatAgent: Could not re-hydrate vector store from persistent cache: {hydrate_err}")
 
         if not vs and document_content:
             try:
@@ -70,7 +70,7 @@ class WebChatAgent:
                 if not err and vs and url:
                     self.vector_cache.set(compute_url_hash(url), vs, metadata=meta)
             except Exception as build_err:
-                logger.warning(f"WebChatAgent: Failed to build on-the-fly vector store: {build_err}")
+                logger.warning(f"ragchatAgent: Failed to build on-the-fly vector store: {build_err}")
 
         return vs, meta
 
@@ -322,4 +322,4 @@ class WebChatAgent:
             raise
 
 
-chat_agent = WebChatAgent()
+chat_agent = ragchatAgent()

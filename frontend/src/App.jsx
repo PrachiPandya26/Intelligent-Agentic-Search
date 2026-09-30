@@ -48,14 +48,14 @@ const API_BASE = (() => {
 })();
 
 function getOrCreateClientId() {
-  let cid = localStorage.getItem("webchat_client_id");
+  let cid = localStorage.getItem("ragchat_client_id");
   if (!cid) {
     cid =
       "client_" +
       (window.crypto?.randomUUID
         ? crypto.randomUUID()
         : Math.random().toString(36).substring(2) + Date.now().toString(36));
-    localStorage.setItem("webchat_client_id", cid);
+    localStorage.setItem("ragchat_client_id", cid);
   }
   return cid;
 }
@@ -454,7 +454,7 @@ export default function App() {
   // Sessions
   const [sessions, setSessions] = useState([]);
   const [currentSessionId, setCurrentSessionId] = useState(() => {
-    return localStorage.getItem("webchat_active_session_id") || null;
+    return localStorage.getItem("ragchat_active_session_id") || null;
   });
   const [sessionSearch, setSessionSearch] = useState("");
 
@@ -470,14 +470,14 @@ export default function App() {
   // Active Document Context
   const [activeDoc, setActiveDoc] = useState(() => {
     try {
-      const saved = localStorage.getItem("webchat_active_doc");
+      const saved = localStorage.getItem("ragchat_active_doc");
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
     }
   });
 
-  // Keep webchat_active_doc in sync with localStorage
+  // Keep ragchat_active_doc in sync with localStorage
   useEffect(() => {
     if (activeDoc) {
       try {
@@ -493,19 +493,19 @@ export default function App() {
               ? activeDoc.content
               : "",
         };
-        localStorage.setItem("webchat_active_doc", JSON.stringify(docSummary));
+        localStorage.setItem("ragchat_active_doc", JSON.stringify(docSummary));
       } catch (e) {
         console.debug("Could not cache activeDoc in localStorage", e);
       }
     } else {
-      localStorage.removeItem("webchat_active_doc");
+      localStorage.removeItem("ragchat_active_doc");
     }
   }, [activeDoc]);
 
   // Chat State (instant rehydration from localStorage to prevent loss on page refresh)
   const [messages, setMessages] = useState(() => {
     try {
-      const saved = localStorage.getItem("webchat_active_messages");
+      const saved = localStorage.getItem("ragchat_active_messages");
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -535,10 +535,10 @@ export default function App() {
             steps: m.steps || [],
           }));
         if (cleanToStore.length > 0) {
-          localStorage.setItem("webchat_active_messages", JSON.stringify(cleanToStore));
+          localStorage.setItem("ragchat_active_messages", JSON.stringify(cleanToStore));
         }
       } else {
-        localStorage.removeItem("webchat_active_messages");
+        localStorage.removeItem("ragchat_active_messages");
       }
     } catch (e) {
       console.debug("Could not cache messages in localStorage", e);
@@ -548,9 +548,9 @@ export default function App() {
   // Keep active session_id in sync with localStorage
   useEffect(() => {
     if (currentSessionId) {
-      localStorage.setItem("webchat_active_session_id", currentSessionId);
+      localStorage.setItem("ragchat_active_session_id", currentSessionId);
     } else {
-      localStorage.removeItem("webchat_active_session_id");
+      localStorage.removeItem("ragchat_active_session_id");
     }
   }, [currentSessionId]);
 
@@ -575,7 +575,7 @@ export default function App() {
     fetchQuota();
     fetchModels();
     fetchSessions();
-    const savedSessionId = localStorage.getItem("webchat_active_session_id");
+    const savedSessionId = localStorage.getItem("ragchat_active_session_id");
     if (savedSessionId) {
       loadSession(savedSessionId);
     }
@@ -705,7 +705,7 @@ export default function App() {
 
       // Reset current session ID so a fresh session is lazily created on the first chat prompt
       setCurrentSessionId(null);
-      localStorage.removeItem("webchat_active_session_id");
+      localStorage.removeItem("ragchat_active_session_id");
 
       // Transition to Chat View cleanly
       setMessages([]);
@@ -846,7 +846,7 @@ export default function App() {
                   if (parsed.session_id) {
                     setCurrentSessionId(parsed.session_id);
                     localStorage.setItem(
-                      "webchat_active_session_id",
+                      "ragchat_active_session_id",
                       parsed.session_id,
                     );
                   }
@@ -923,7 +923,7 @@ export default function App() {
 
         if (data.session_id) {
           setCurrentSessionId(data.session_id);
-          localStorage.setItem("webchat_active_session_id", data.session_id);
+          localStorage.setItem("ragchat_active_session_id", data.session_id);
         }
 
         setMessages((prev) => {
@@ -968,9 +968,9 @@ export default function App() {
       abortControllerRef.current = null;
     }
     setIsGenerating(false);
-    localStorage.removeItem("webchat_active_session_id");
-    localStorage.removeItem("webchat_active_messages");
-    localStorage.removeItem("webchat_active_doc");
+    localStorage.removeItem("ragchat_active_session_id");
+    localStorage.removeItem("ragchat_active_messages");
+    localStorage.removeItem("ragchat_active_doc");
     setCurrentSessionId(null);
     setMessages([]);
     setActiveDoc(null);
@@ -988,8 +988,8 @@ export default function App() {
       abortControllerRef.current = null;
     }
     setIsGenerating(false);
-    localStorage.removeItem("webchat_active_session_id");
-    localStorage.removeItem("webchat_active_messages");
+    localStorage.removeItem("ragchat_active_session_id");
+    localStorage.removeItem("ragchat_active_messages");
     setCurrentSessionId(null);
     setMessages([]);
     setInputMessage("");
@@ -1015,7 +1015,7 @@ export default function App() {
       if (res.ok) {
         const data = await res.json();
         setCurrentSessionId(sid);
-        localStorage.setItem("webchat_active_session_id", sid);
+        localStorage.setItem("ragchat_active_session_id", sid);
         if (data.url) {
           setActiveDoc({
             url: data.url,
@@ -1027,7 +1027,7 @@ export default function App() {
           });
         } else {
           setActiveDoc(null);
-          localStorage.removeItem("webchat_active_doc");
+          localStorage.removeItem("ragchat_active_doc");
         }
         if (Array.isArray(data.messages)) {
           const loadedMsgs = data.messages.map((m) => ({
@@ -1040,13 +1040,13 @@ export default function App() {
           }));
           setMessages(loadedMsgs);
           try {
-            localStorage.setItem("webchat_active_messages", JSON.stringify(loadedMsgs));
-          } catch (e) {}
+            localStorage.setItem("ragchat_active_messages", JSON.stringify(loadedMsgs));
+          } catch (e) { }
         }
       } else if (res.status === 404) {
         // Stale or deleted session: clean up local storage
-        localStorage.removeItem("webchat_active_session_id");
-        localStorage.removeItem("webchat_active_messages");
+        localStorage.removeItem("ragchat_active_session_id");
+        localStorage.removeItem("ragchat_active_messages");
         setCurrentSessionId(null);
         setMessages([]);
       }
@@ -1107,7 +1107,7 @@ export default function App() {
                 </div>
                 <div>
                   <h1 className="font-semibold text-sm text-white tracking-tight">
-                    WebChat
+                    ragchat
                   </h1>
                 </div>
               </div>
@@ -1164,11 +1164,10 @@ export default function App() {
                   <div
                     key={s.session_id}
                     onClick={() => loadSession(s.session_id)}
-                    className={`group flex items-center justify-between px-2.5 py-2 rounded-lg text-xs cursor-pointer transition-colors ${
-                      currentSessionId === s.session_id
+                    className={`group flex items-center justify-between px-2.5 py-2 rounded-lg text-xs cursor-pointer transition-colors ${currentSessionId === s.session_id
                         ? "bg-[#212121] text-white font-medium border border-zinc-700/60"
                         : "hover:bg-[#212121]/60 text-zinc-400 hover:text-zinc-200"
-                    }`}>
+                      }`}>
                     <div className="flex items-center gap-2 min-w-0 flex-1">
                       <MessageSquare className="w-3.5 h-3.5 shrink-0 text-zinc-400 group-hover:text-zinc-300" />
                       <span className="truncate">
@@ -1314,11 +1313,10 @@ export default function App() {
                       </span>
                     )}
                     <span
-                      className={`text-[11px] px-2.5 py-0.5 rounded-full font-medium flex items-center gap-1 ${
-                        validUrls.length > 0
+                      className={`text-[11px] px-2.5 py-0.5 rounded-full font-medium flex items-center gap-1 ${validUrls.length > 0
                           ? "bg-zinc-800 text-zinc-200 border border-zinc-700"
                           : "bg-zinc-800/50 text-zinc-500"
-                      }`}>
+                        }`}>
                       {validUrls.length > 0 && (
                         <CheckCircle2 className="w-3 h-3 text-zinc-300" />
                       )}
@@ -1333,11 +1331,10 @@ export default function App() {
                   value={urlsInput}
                   onChange={(e) => setUrlsInput(e.target.value)}
                   placeholder="Paste website URL(s) here (e.g. example.com, https://docs.python.org)..."
-                  className={`w-full h-32 bg-[#121214] border rounded-xl p-3.5 text-sm text-zinc-100 placeholder:text-zinc-600 resize-none outline-none transition-colors font-mono ${
-                    invalidUrls.length > 0
+                  className={`w-full h-32 bg-[#121214] border rounded-xl p-3.5 text-sm text-zinc-100 placeholder:text-zinc-600 resize-none outline-none transition-colors font-mono ${invalidUrls.length > 0
                       ? "border-rose-500/40 focus:border-rose-500/60"
                       : "border-zinc-800 focus:border-zinc-600"
-                  }`}
+                    }`}
                 />
 
                 {/* Invalid URL Format Warning Banner */}
@@ -1371,7 +1368,7 @@ export default function App() {
                     {invalidUrls.length > 0
                       ? "⚠️ Correct the invalid URLs above to enable ingestion."
                       : ingestStatus ||
-                        "Automatic paywall bypass and multi-provider vector indexing."}
+                      "Automatic paywall bypass and multi-provider vector indexing."}
                   </div>
                   <button
                     onClick={handleIngest}
@@ -1514,11 +1511,10 @@ export default function App() {
                     )}
 
                     <div
-                      className={`text-sm leading-relaxed ${
-                        msg.role === "user"
+                      className={`text-sm leading-relaxed ${msg.role === "user"
                           ? "bg-[#2f2f2f] text-white border border-zinc-700/60 rounded-3xl rounded-tr-md px-5 py-3.5 shadow-sm max-w-[85%] md:max-w-[75%]"
                           : "max-w-[90%] md:max-w-[85%] rounded-2xl p-4 md:p-5 text-[14.5px] text-[#ececec] bg-[#18181b]/80 border border-zinc-800/80 shadow-md backdrop-blur-sm rounded-tl-md"
-                      }`}>
+                        }`}>
                       {/* Agentic Chain-of-Thought / Thinking Accordion */}
                       {msg.role === "assistant" &&
                         msg.steps &&
@@ -1564,11 +1560,10 @@ export default function App() {
                                   return (
                                     <div
                                       key={sIdx}
-                                      className={`flex items-start gap-2.5 transition-colors ${
-                                        isLatestActive
+                                      className={`flex items-start gap-2.5 transition-colors ${isLatestActive
                                           ? "text-zinc-100"
                                           : "text-zinc-300"
-                                      }`}>
+                                        }`}>
                                       <span className="text-zinc-500 shrink-0 font-mono font-bold">
                                         #{sIdx + 1}
                                       </span>
@@ -1745,7 +1740,7 @@ export default function App() {
                                   </code>
                                 );
                               },
-                              }}>
+                            }}>
                             {cleanMarkdownContent(msg.content)}
                           </ReactMarkdown>
                           {isGenerating && idx === messages.length - 1 && (
@@ -1938,11 +1933,10 @@ export default function App() {
                     type="button"
                     onClick={() => handleSendMessage()}
                     disabled={!inputMessage.trim()}
-                    className={`w-9 h-9 shrink-0 rounded-full flex items-center justify-center mb-1 mr-1 transition-all ${
-                      !inputMessage.trim()
+                    className={`w-9 h-9 shrink-0 rounded-full flex items-center justify-center mb-1 mr-1 transition-all ${!inputMessage.trim()
                         ? "bg-zinc-700/40 text-zinc-500 cursor-not-allowed"
                         : "bg-white text-black hover:bg-zinc-200 active:scale-95 shadow-md cursor-pointer"
-                    }`}>
+                      }`}>
                     <Send className="w-4 h-4 ml-0.5" />
                   </button>
                 )}
@@ -2059,43 +2053,43 @@ export default function App() {
                 {(models.length > 0
                   ? models
                   : [
-                      {
-                        priority: 1,
-                        model_name: "gemini-3.6-flash",
-                        provider: "google",
-                        status: "Healthy (Primary)",
-                      },
-                      {
-                        priority: 2,
-                        model_name: "openai/gpt-oss-120b",
-                        provider: "groq",
-                        status: "Active Fallback",
-                      },
-                      {
-                        priority: 3,
-                        model_name: "gemini-3.5-flash",
-                        provider: "google",
-                        status: "Standby",
-                      },
-                      {
-                        priority: 4,
-                        model_name: "groq/compound",
-                        provider: "groq",
-                        status: "Standby",
-                      },
-                      {
-                        priority: 5,
-                        model_name: "gemini-3.5-flash-lite",
-                        provider: "google",
-                        status: "Standby",
-                      },
-                      {
-                        priority: 6,
-                        model_name: "openai/gpt-oss-20b",
-                        provider: "groq",
-                        status: "Standby",
-                      },
-                    ]
+                    {
+                      priority: 1,
+                      model_name: "gemini-3.6-flash",
+                      provider: "google",
+                      status: "Healthy (Primary)",
+                    },
+                    {
+                      priority: 2,
+                      model_name: "openai/gpt-oss-120b",
+                      provider: "groq",
+                      status: "Active Fallback",
+                    },
+                    {
+                      priority: 3,
+                      model_name: "gemini-3.5-flash",
+                      provider: "google",
+                      status: "Standby",
+                    },
+                    {
+                      priority: 4,
+                      model_name: "groq/compound",
+                      provider: "groq",
+                      status: "Standby",
+                    },
+                    {
+                      priority: 5,
+                      model_name: "gemini-3.5-flash-lite",
+                      provider: "google",
+                      status: "Standby",
+                    },
+                    {
+                      priority: 6,
+                      model_name: "openai/gpt-oss-20b",
+                      provider: "groq",
+                      status: "Standby",
+                    },
+                  ]
                 ).map((m, idx) => (
                   <div
                     key={idx}

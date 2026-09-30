@@ -1,5 +1,5 @@
 """
-Custom CSS styles for WebChat Streamlit UI.
+Custom CSS styles for ragchat Streamlit UI.
 Features a modern, glassmorphic dark theme with sleek typography and responsive cards.
 """
 

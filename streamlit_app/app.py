@@ -67,7 +67,7 @@ from streamlit_app.styles import CUSTOM_CSS
 
 # Page configuration
 st.set_page_config(
-    page_title="WebChat AI",
+    page_title="ragchat AI",
     page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded",
@@ -91,7 +91,7 @@ def get_persistent_client_id() -> str:
 
         # 3. Check Streamlit cookie if available
         if hasattr(st, "context") and hasattr(st.context, "cookies"):
-            cookie_cid = st.context.cookies.get("webchat_cid") or st.context.cookies.get("_webchat_cid")
+            cookie_cid = st.context.cookies.get("ragchat_cid") or st.context.cookies.get("_ragchat_cid")
             if cookie_cid and str(cookie_cid).strip():
                 return str(cookie_cid).strip()
 
@@ -235,7 +235,7 @@ def sync_local_storage_client_id():
         <script>
         (function() {{
             try {{
-                var storedCid = localStorage.getItem("webchat_client_id");
+                var storedCid = localStorage.getItem("ragchat_client_id");
                 var currentCid = "{active_cid}";
                 
                 if (storedCid && storedCid.trim()) {{
@@ -245,7 +245,7 @@ def sync_local_storage_client_id():
                         window.parent.location.replace(parentUrl.toString());
                     }}
                 }} else if (currentCid && currentCid.trim()) {{
-                    localStorage.setItem("webchat_client_id", currentCid);
+                    localStorage.setItem("ragchat_client_id", currentCid);
                 }}
             }} catch (err) {{
                 // Cross-origin iframe fallback

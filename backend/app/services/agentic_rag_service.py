@@ -653,7 +653,7 @@ class AgenticRAGService:
         """Queries DuckDuckGo Instant Answer API and Wikipedia Encyclopedia Search."""
         try:
             web_results: List[Dict[str, Any]] = []
-            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) WebChat/2.0"}
+            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ragchat/2.0"}
 
             # DuckDuckGo Instant Knowledge API
             try:
